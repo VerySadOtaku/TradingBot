@@ -5,20 +5,33 @@ const binance = require('node-binance-api')().options({
     test: true 
   });
   
-  let CryptSymbArray = [];
   
-  function pair(currVar){
-  
-  binance.prices((error, ticker) => {
-    Object.keys(ticker).forEach(function(k, index, array){
-      if(k.indexOf(currVar) >= 0)
-      CryptSymbArray.push(k.replace(currVar, ""));
-  
-    if(array.length == index+1)
-        console.log(CryptSymbArray);
-  });
-  });
-  
-  }
-  
-  pair("USDT");
+ function GetPairs(first, second)
+ {
+    binance.prices((error, ticker) => {
+        let firstPair = [];
+        let finalPair = [];
+
+        Object.keys(ticker).forEach(function(k, index, array)
+        {
+          if(k.indexOf(first) >= 0)
+            firstPair.push(k.replace(first, ""));                               //First array
+          
+        if(array.length == index+1)
+                {
+                    let tickerObject = Object.keys(ticker);
+                    console.log(tickerObject);
+                    firstPair.forEach(function(k, index, array)
+                    {
+                        if(tickerObject.includes(k+second))
+                        {
+                            finalPair.push(k);
+                            console.log(k);                                     
+                        }                     
+                    });
+                }
+        });
+    });
+ }
+
+ GetPairs("BTC", "USDT");
