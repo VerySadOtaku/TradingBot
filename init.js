@@ -6,6 +6,7 @@ const binance = require('node-binance-api')().options({
   });
   
   
+  
  function GetPairs(first, second)
  {
     binance.prices((error, ticker) => {
@@ -34,4 +35,41 @@ const binance = require('node-binance-api')().options({
     });
  }
 
- GetPairs("BTC", "USDT");
+ //-------------TEST
+ function GetPairsFromArray(arr)
+ {
+    binance.prices((error, ticker) => {
+
+
+            let firstPair = [];
+            let finalPair = [];
+
+        arr.forEach((el, ind, ar) => {
+            if(ind+1 == ar.length) 
+                return;
+
+            Object.keys(ticker).forEach(function(k, index, array)
+            {
+            if(k.indexOf(el) >= 0)
+                firstPair.push(k.replace(el, ""));                               //First array
+            
+            if(array.length == index+1)
+                    {
+                        let tickerObject = Object.keys(ticker);
+                        console.log(tickerObject);
+                        firstPair.forEach(function(k, index, array)
+                        {
+                            if(tickerObject.includes(k+arr[ind+1]))
+                            {
+                                finalPair.push(k);
+                                //console.log(k);                                     
+                            }                     
+                        });
+                    }
+            });
+        });
+    });
+ }
+ //-----------------
+
+ GetPairsFromArray(["BTC", "USDT", "ETH"]); //Не готова ещё
